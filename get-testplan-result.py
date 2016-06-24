@@ -8,8 +8,9 @@ import os
 testplanid = os.getenv("testplanid") or None
 buildid    = os.getenv("buildid")    or None
 TESTLINKAPIKEY = os.getenv("TESTLINKAPIKEY") or None
+SERVER_URL = os.getenv("SERVER_URL") or None
 
-if None == testplanid or None == buildid or None == TESTLINKAPIKEY:
+if None == testplanid or None == buildid or None == TESTLINKAPIKEY or None == SERVER_URL:
     print("Can not get the value of the params: testplanid or buildid.")
     exit(1)
 
