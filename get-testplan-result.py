@@ -7,8 +7,9 @@ import os
 
 testplanid = os.getenv("testplanid") or None
 buildid    = os.getenv("buildid")    or None
+TESTLINKAPIKEY = os.getenv("TESTLINKAPIKEY") or None
 
-if None == testplanid or None == buildid:
+if None == testplanid or None == buildid or None == TESTLINKAPIKEY:
     print("Can not get the value of the params: testplanid or buildid.")
     exit(1)
 
@@ -55,7 +56,7 @@ class TestlinkAPIClient:
         return self.server.tl.getTestSuitesForTestPlan(dictargs)
 
 # substitute your Dev Key Here
-client = TestlinkAPIClient("05742a441efd68af4062f2a7b12d7547")
+client = TestlinkAPIClient(TESTLINKAPIKEY)
 
 def getPlanResult(testplanid, assignedto_int):
     planargs = {}
