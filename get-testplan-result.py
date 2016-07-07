@@ -5,21 +5,24 @@ import xmlrpc.client
 import json
 import os
 
-testplanid = os.getenv("testplanid") or None
-buildid    = os.getenv("buildid")    or None
-TESTLINKAPIKEY = os.getenv("TESTLINKAPIKEY") or None
-SERVER_URL = os.getenv("SERVER_URL") or None
+testplanid = os.getenv("testplanid")
+buildid    = os.getenv("buildid")
+TESTLINKAPIKEY = os.getenv("TESTLINKAPIKEY")
+SERVER_URL = os.getenv("SERVER_URL")
+
+userinfo = {}
+userinfo["zhaofangfang"] = 34
+userinfo["wangyanli"] = 17
+userinfo["capricon"] = 23
+userinfo["wangyingtao"] = 28
 
 if None == testplanid or None == buildid or None == TESTLINKAPIKEY or None == SERVER_URL:
     print("Can not get the value of the params: testplanid or buildid.")
     exit(1)
 
-class TestlinkAPIClient:        
-    # substitute your server URL Here
-    SERVER_URL = "https://testlink.deepin.io/lib/api/xmlrpc/v1/xmlrpc.php"
-      
+class TestlinkAPIClient:
     def __init__(self, devKey):
-        self.server = xmlrpc.client.ServerProxy(self.SERVER_URL)
+        self.server = xmlrpc.client.ServerProxy(SERVER_URL)
         self.devKey = devKey
 
     def getInfo(self):
@@ -39,7 +42,7 @@ class TestlinkAPIClient:
     def getTestcaseForTestPlan(self, dictargs):
         dictargs["devKey"] = self.devKey
         return self.server.tl.getTestCasesForTestPlan(dictargs)
-        
+
     def getTestCaseIDByName(self, dictargs):
         dictargs["devKey"] = self.devKey
         return self.server.tl.getTestCaseIDByName(dictargs)
@@ -63,7 +66,7 @@ def getPlanResult(testplanid, assignedto_int):
     planargs = {}
     planargs["testplanid"] = testplanid
     planargs["assignedto"] = assignedto_int
-    planargs["buildid"] = buildid 
+    planargs["buildid"] = buildid
     plantestcases = client.getTestcaseForTestPlan(planargs)
     jsondata = {}
     jsondata['testcasedetail'] = []
@@ -95,17 +98,10 @@ def getPlanResult(testplanid, assignedto_int):
     jsondata['test_status_blocked'] = num_block
     jsondata['test_status_not_run'] = num_not_run
     jsondata['testcasedetail'] = templist
-    
+
     return jsondata
 
-userinfo = {}
-userinfo["zhaofangfang"] = 34
-userinfo["wangyanli"] = 17
-userinfo["capricon"] = 23
-userinfo["wangyingtao"] = 28
-
 alldata = {}
-
 for k in userinfo.keys():
     data = getPlanResult(testplanid, userinfo[k])
     if data != None:
